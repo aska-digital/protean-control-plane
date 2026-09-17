@@ -7,6 +7,18 @@ canonical procedure home: a trigger index that routes a request to the minimum
 skill bundle, the dispatch preflight, the GitHub workflow, the failure policy,
 and the table of gates the plane cites.
 
+## Do you need this?
+
+ROLE: One canonical procedure home for dispatch. A trigger index routes each request to the minimum skill bundle, with the dispatch preflight, the GitHub workflow, the failure policy, and the table of cited gates.
+
+USE WHEN:
+- A coordinator or relay must load only the bundle a task names, starting from `skills/protean-control-plane/SKILL.md` as the routing screen.
+- Record gates must run through one wrapper that locates the installed `protean-ops` ingredient and reports each cited gate unavailable with exit 0 when it is absent.
+
+SKIP WHEN:
+- `protean-doctrine` or `protean-ops` is missing and cannot be installed. The manifest declares both as hard requirements and the plane ships no copy of either file, so `--no-deps` installs report degraded.
+- The need is platform mechanics or supervision and recovery detail. This README states the skill deliberately omits them because their documents are outside this distribution.
+
 ## What it installs and where
 
 | Path | Contents |
