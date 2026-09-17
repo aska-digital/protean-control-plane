@@ -21,8 +21,10 @@ import subprocess
 import sys
 
 GATES = ("check-rotation.py", "check-inflight.py", "check-learnings.py",
-         "check-hotpath-freeze.py", "check-decision-report.py")
-HELP_ONLY = {"check-hotpath-freeze.py", "check-decision-report.py"}
+         "check-hotpath-freeze.py", "check-decision-report.py",
+         "check-contrib-state.py")
+HELP_ONLY = {"check-hotpath-freeze.py", "check-decision-report.py",
+             "check-contrib-state.py"}
 
 
 def candidate_dirs(target):

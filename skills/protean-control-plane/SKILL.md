@@ -1,7 +1,7 @@
 ---
 name: protean-control-plane
 description: "Use for any dispatch, rotation, concurrency, GitHub workflow, or learning decision. Compact trigger index; load only the bundle the task names."
-version: 1.0.0
+version: 1.1.0
 author: the Protean publication
 license: MIT
 platforms: [linux, macos, windows]
@@ -23,7 +23,8 @@ conflicts.
 This is the procedure half of the control plane (the law). The state half (the
 records) is append-only under `records/` in the installed kit, or under
 `$PROTEAN_RECORDS_ROOT` when one is set: `ROTATION-STATE.md`, `INFLIGHT.md`,
-`LEARNINGS.md`, `DISPATCH-LEDGER.md`, `OWNERSHIP-MATRIX.md`. Ownership: the
+`LEARNINGS.md`, `DISPATCH-LEDGER.md`, `OWNERSHIP-MATRIX.md`,
+`CONTRIB-STATE.md`. Ownership: the
 coordinator owns this skill and the records, QA owns gate verdicts and may not
 author the fixes it reviews, build maintains the gates.
 
@@ -45,6 +46,7 @@ procedure text.
 | New external source, repository, or URL ingestion | the knowledge-ingestion procedure; a batch of five or more sources uses the batch form; a capability audit precedes adopting any external tool | research ingests; the external knowledge base is the home for external data | external data goes to the knowledge base only; internal procedure goes to a skill; one fact, one home |
 | Any multi-agent project | `protean-operating-doctrine` plus the platform's own launch and supervision mechanics; just-in-time file handoff per section B | the coordinator dispatches, QA gates, the coordinator gives final review | launch through the platform's own profile mechanism, never a cross-profile delegation call; the model receipt; the rotation, inflight, and learnings gates |
 | Major decision (any change to a canonical home, layer model, gate, dispatch rule, public surface, credential or model policy, or anything irreversible without a user action) | this row plus the decision's own bundle | design renders the report, the coordinator approves | the decision report must exist and be linked before the change lands |
+| Continual contribution mode - idle-time work on a repository we own or depend on, delivered as a pull request, an issue, or a pull-request review | this skill's section G (the rule), the contribution-state record and its gate (the value), the GitHub workflow pack's contribution procedure (the mechanics), and the draft pipeline for anything a human approves | build implements, QA audits every contribution, the coordinator integrates | an evidenced gap plus a duplicate search before anything is drafted; the contribution-state gate green with the intended target and action class; an independent QA verdict on every contribution; exact-byte approval before any external write |
 
 ## B. Mandatory preflight (before the first write of any dispatch)
 
@@ -120,6 +122,65 @@ record: incident, root cause, one rule, one canonical home, one enforcement
 surface, one independent verifier. A rule without an enforcement command is a
 preference, not a law, and the learnings gate rejects it.
 
+## G. Contribution mode
+
+Two modes, one flag, one home. The rule is here. The value is a record the
+`protean-ops` ingredient owns and its gate reads, and the bounded numbers stay
+there too: this section states the law, not the counters.
+
+- **Internal mode is always on.** Contribution work against a repository the
+  operator administers needs no toggle and no per-action approval. It is gated by
+  evidence, the lane cap, the independent QA gate, and the repository's own
+  continuous integration, and by nothing else.
+- **External mode is off by default.** Contribution work whose target is not such
+  a repository is off unless the operator turns on one flag. Off means no remote
+  write of any kind, including a push to a fork. A local branch, a commit, a test
+  run, and a rendered draft stay allowed, and the unpushed branch is the
+  deliverable.
+- **One flag, fail closed.** The kill switch is the single header field
+  `external_contrib: on|off` in the contribution-state record. An absent record, an
+  unreadable record, or a value outside `{on, off}` all read as `off`.
+
+Law that holds whatever the toggle says:
+
+- Every contribution carries an evidenced gap and a duplicate search before
+  anything is drafted. A candidate that cannot show both does not ship.
+- The always-on half is asserted, never assumed: the gate refuses the internal
+  toggle being off unless the record cites the decision that recorded it.
+- Lanes are bounded. The lane cap, the rate windows, the quiet-hours window, the
+  per-thread write limit, the per-repository burst detector, and the grant rules
+  are recomputed by the gate from timestamped rows, never from memory, and a
+  process-local counter is not admissible evidence.
+- Backlog governors and thread attention are live reads, not stored counters. A
+  lane reads the target repository's own numbers at post time and records the raw
+  output with the contribution.
+- No pings, no content-free writes, and no attention manufactured to justify a
+  write. A comment carries a new fact or it is not posted.
+- A high-traffic thread takes no unsolicited write. The permitted forms are an
+  update to our own live item carrying a new fact, an invited review, an
+  operator-approved contribution, or a bounded grant that names the thread.
+- Every contribution, internal or external, pull request or issue or review,
+  passes the independent QA gate before it is posted, pushed, or merged. The
+  author never audits their own work.
+- Approval binds to exact bytes: a draft is hashed at approval and recomputed at
+  post time, and a mismatch returns for re-approval instead of posting.
+- A contribution lane is bounded to one gap and one action, and it terminates
+  with a receipt. A second gap it finds is recorded, never worked in-run.
+
+**Preflight addition.** Before the first remote write of a dispatch, read the
+contribution-state record and record its value, its file md5, and the UTC read
+time in the lane receipt, then run the contribution-state gate with the intended
+target and action class. Run it again immediately before the write. A value read
+earlier in the lane is not authority.
+
+**Idle trigger.** The mode is entered from a machine-checked idle predicate: the
+running lane set is empty, no waiting item is unblocked, and no live claim is
+open. Exactly one evaluator per project evaluates it, claims the epoch before
+dispatching, and then dispatches immediately, with no operator question, because
+internal mode is always on and the external gate is what holds a draft back. A
+contribution lane never dispatches a lane, never evaluates the predicate, and
+never acts on a finding inside its own run.
+
 ## Gate commands
 
 The record gates belong to the `protean-ops` ingredient and are cited here, never
@@ -133,6 +194,7 @@ reason.
 | learnings | `python3 scripts/protean-ops/check-learnings.py` |
 | decision report | `python3 scripts/protean-ops/check-decision-report.py <report.html> [--manifest M] [--evidence E]` |
 | hot-path freeze | `python3 scripts/protean-ops/check-hotpath-freeze.py <manifest> [--allow-change <receipt>]` |
+| contribution state | `python3 scripts/protean-ops/check-contrib-state.py <records>/CONTRIB-STATE.md [--target internal\|external --repo <owner/name> --action pr\|issue\|comment\|review\|merge]` |
 
 Record resolution defaults to `./records` and can be redirected with
 `$PROTEAN_RECORDS_ROOT`. The wrapper at
