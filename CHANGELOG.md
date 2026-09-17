@@ -3,6 +3,25 @@
 All notable changes to this repository are recorded here. The format is a short
 entry per release: what changed, why, and how it was verified.
 
+## 1.2.0
+
+- **What:** add section H, *End-of-turn worker-completion check*, to the control-plane skill.
+  Section G states the idle predicate as a rule about state; section H binds it to conversation
+  turns: on every worker-completion turn and the first return-from-absence turn, the project's
+  single evaluator runs a bounded checklist before it replies — snapshot, classify by process
+  registry poll (a completion notification is a trigger, never proof of done; a receipt is
+  terminal only when its last non-empty line is a terminal marker), one closure pass, then
+  exactly one of continue-live-lane, dispatch-unblocked-owner-work, or claim-epoch-and-dispatch-
+  contribution. A budget-exited lane (dead handle, no receipt, missing lane directory) must be
+  handled in the same turn by relaunch or next owner task, never by silence. One closure pass and
+  one new lane per claimed epoch bound the response against dispatch storms.
+- **Why:** an observed production incident: two workers finished, the orchestrator received both
+  completion notifications, polled, replied briefly, and dispatched nothing — and stayed idle until
+  the operator asked. Every element of the idle predicate existed in the procedure, but no rule
+  attached it to the completion turn, so the turn ended lawfully with zero dispatch actions.
+- **How verified:** internal-names and control-plane gates run clean on the changed tree; skill
+  frontmatter version, the ingredient descriptor, and this changelog bumped in the same change.
+
 ## 1.1.0
 
 - **What:** add section G, *Contribution mode*, to the control-plane skill, one row to the
