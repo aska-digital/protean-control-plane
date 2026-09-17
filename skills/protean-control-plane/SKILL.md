@@ -1,7 +1,7 @@
 ---
 name: protean-control-plane
 description: "Use for any dispatch, rotation, concurrency, GitHub workflow, or learning decision. Compact trigger index; load only the bundle the task names."
-version: 1.1.0
+version: 1.2.0
 author: the Protean publication
 license: MIT
 platforms: [linux, macos, windows]
@@ -180,6 +180,46 @@ dispatching, and then dispatches immediately, with no operator question, because
 internal mode is always on and the external gate is what holds a draft back. A
 contribution lane never dispatches a lane, never evaluates the predicate, and
 never acts on a finding inside its own run.
+
+## H. End-of-turn worker-completion check
+
+The idle trigger is a rule about state; this section is the rule about *turns*. It binds the
+project's single idle evaluator. On every worker-completion turn and on the first
+return-from-absence turn, the evaluator runs this checklist *before it replies*. A completion
+notification is a trigger to evaluate, never proof that work is done.
+
+1. **Snapshot.** Read the project's task-home record and the ops inflight and rotation records.
+2. **Classify by poll, never by notification.** A lane row is live only while its process handle
+   appears in the process-registry listing (a read-only poll of a specific handle is admissible;
+   it does not consume the completion event). A row is closed only when the handle is absent and
+   the lane directory's receipt ends, on its last non-empty line, in a terminal marker
+   (`STABLE`, `CLOSED`, `PASS`, or `COMPLETE`); a receipt whose last non-empty line is anything
+   else is not terminal. A handle absent for two consecutive classification rounds with no receipt
+   is stale, not running, and must not flip status on transient registry noise.
+3. **One closure pass, bounded.** Move bookkeeping-complete rows to closed with the UTC closure
+   time and the receipt path. If the pass changed the file, re-read it once and re-count. At most
+   one closure pass per evaluation; a second pass is a loop.
+4. **Three-way decision, exactly one branch, before the reply.**
+   - **(a) A lane is live or its terminality is unknown** — stop dispatching, continue the live
+     lane, and report from the poll evidence.
+   - **(b) An owner-waiting item is unblocked** — its blocking artifact exists, readable and
+     non-empty, or its blocking decision is recorded — dispatch that work immediately, before any
+     contribution work.
+   - **(c) Otherwise** — claim the idle epoch, then dispatch contribution work per section G, in
+     the same turn, with no waiting and no internal asking.
+5. **Budget exit is explicit, never silence.** A row whose handle is absent and whose lane
+   directory holds no receipt (or does not exist) is a budget exit: never treat it as still
+   running and never treat it as done. Handle it before any contribution dispatch — relaunch that
+   lane if it is relaunchable, highest priority first, otherwise dispatch the next owner task.
+   Ending a completion turn with a bare reply or with silence is a procedural violation by
+   definition.
+6. **Anti-storm guard.** Before dispatching, append the epoch claim keyed by the idle fingerprint
+   and read it back. At most one new lane per idle epoch; exactly one evaluator per project — a
+   second evaluator that finds a live epoch claim on the same fingerprint exits as a lost race
+   without dispatching.
+7. **Evidence.** The reply cites the classification actually performed: the registry poll, the
+   per-lane statuses, any rows closed, the branch taken, and the epoch claim read-back. A reply
+   with no poll and no predicate result cannot be verified and does not close the turn.
 
 ## Gate commands
 
