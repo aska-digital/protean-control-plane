@@ -1,0 +1,46 @@
+{
+  "slug": "protean-control-plane",
+  "version": "1.0.0",
+  "contract": "The control-plane skill pack: one canonical procedure home that routes a request to the minimum skill bundle, with the gate table and failure policy.",
+  "kind": "skills",
+  "entrypoint": "install.sh",
+  "payload": [
+    "skills/protean-control-plane",
+    "gates/protean-control-plane"
+  ],
+  "installTargets": [
+    "skills/protean-control-plane",
+    "gates/protean-control-plane"
+  ],
+  "gates": [
+    {
+      "name": "internal-names",
+      "cwd": ".",
+      "postInstall": true,
+      "cmd": "python3 gates/protean-control-plane/check-internal-names.py ."
+    },
+    {
+      "name": "control-plane-gates",
+      "cwd": ".",
+      "postInstall": true,
+      "cmd": "python3 gates/protean-control-plane/check-control-plane-gates.py"
+    }
+  ],
+  "requires": [
+    "protean-doctrine",
+    "protean-ops"
+  ],
+  "recommends": [
+    "protean-drafts",
+    "protean-github-flow",
+    "protean-sym2p"
+  ],
+  "runtime": {
+    "python": ">=3.9",
+    "bin": [
+      "git"
+    ]
+  },
+  "license": "MIT",
+  "open": []
+}
