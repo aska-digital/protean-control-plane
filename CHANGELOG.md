@@ -3,6 +3,31 @@
 All notable changes to this repository are recorded here. The format is a short
 entry per release: what changed, why, and how it was verified.
 
+## 1.3.0
+
+- **What:** add one trigger-index row and an entry-state paragraph to section G, *Contribution
+  mode*. The row routes the draft-versus-ready decision to this skill's section G and the
+  `protean-github-flow` ingredient, which owns the platform procedure and the state semantics. The
+  paragraph states the law: a large or high-attention contribution is a draft at entry and is never
+  opened ready; a small fix in a repository we administer may open ready only after the independent
+  pre-post verdict; on a target we do not administer the entry state is a local draft, then a GitHub
+  draft once the exact bytes are approved, with the ready transition a separate approved step. It
+  also names the two things to read live rather than assume: whether checks or Actions run on a
+  draft, and how draft state interacts with branch protection, rulesets, required checks, or merge
+  queues.
+- **Why:** the control plane routed contribution work but had no row for the state a contribution
+  opens in, so the entry state was unaddressed at the point where the lane is defined. A draft that
+  can be read as a review request, or a ready pull request that can be read as a verdict, is a
+  procedure gap with a real cost.
+- **Division of the feature:** the law is stated here because the permission to write is what a lane
+  needs first. The draft and ready semantics, the CLI and API forms, and the transition rules stay
+  with the `protean-github-flow` ingredient, and the lane composition stays with the doctrine. This
+  change adds no gate, no counter, and no bounded value.
+- **How verified:** internal-names and control-plane gates run clean on the changed tree; skill
+  frontmatter version, the ingredient descriptor, the installer banner, and this changelog bumped
+  in the same change (the installer banner had drifted at 1.2.0).
+- **License:** MIT. The committed `LICENSE` file is authoritative.
+
 ## 1.2.0
 
 - **What:** add section H, *End-of-turn worker-completion check*, to the control-plane skill.

@@ -1,7 +1,7 @@
 ---
 name: protean-control-plane
 description: "Use for any dispatch, rotation, concurrency, GitHub workflow, or learning decision. Compact trigger index; load only the bundle the task names."
-version: 1.2.0
+version: 1.3.0
 author: the Protean publication
 license: MIT
 platforms: [linux, macos, windows]
@@ -47,6 +47,7 @@ procedure text.
 | Any multi-agent project | `protean-operating-doctrine` plus the platform's own launch and supervision mechanics; just-in-time file handoff per section B | the coordinator dispatches, QA gates, the coordinator gives final review | launch through the platform's own profile mechanism, never a cross-profile delegation call; the model receipt; the rotation, inflight, and learnings gates |
 | Major decision (any change to a canonical home, layer model, gate, dispatch rule, public surface, credential or model policy, or anything irreversible without a user action) | this row plus the decision's own bundle | design renders the report, the coordinator approves | the decision report must exist and be linked before the change lands |
 | Continual contribution mode - idle-time work on a repository we own or depend on, delivered as a pull request, an issue, or a pull-request review | this skill's section G (the rule), the contribution-state record and its gate (the value), the GitHub workflow pack's contribution procedure (the mechanics), and the draft pipeline for anything a human approves | build implements, QA audits every contribution, the coordinator integrates | an evidenced gap plus a duplicate search before anything is drafted; the contribution-state gate green with the intended target and action class; an independent QA verdict on every contribution; exact-byte approval before any external write |
+| Contribution entry state - is this contribution a draft or a ready pull request | this skill's section G (the rule and the entry state) and `protean-github-flow` (the state semantics, the CLI and API forms, and the transition rules) | build implements and opens, QA audits the exact live head, the coordinator integrates | draft at entry for anything large or high-attention; ready only for a small fix in a repository we administer and only after the independent pre-post verdict; the ready transition is a separate approved step with its own head read-back |
 
 ## B. Mandatory preflight (before the first write of any dispatch)
 
@@ -166,6 +167,22 @@ Law that holds whatever the toggle says:
   post time, and a mismatch returns for re-approval instead of posting.
 - A contribution lane is bounded to one gap and one action, and it terminates
   with a receipt. A second gap it finds is recorded, never worked in-run.
+
+**Entry state: draft or ready.** A contribution's first platform decision is the
+state it opens in, and one rule covers it. A large or high-attention contribution
+is a draft at entry and is never opened ready. A small fix in a repository we
+administer may open ready, and only after the independent pre-post verdict has
+passed. On a target we do not administer the entry state is a local draft while
+remote writes are off, then a GitHub draft once the exact bytes are approved, and
+the ready transition is a separate step covered by its own approval or grant. The
+platform procedure, the exact state semantics, and the transition rules are the
+GitHub workflow pack's; this section states the law and points there.
+
+Read live, never assume: whether checks or Actions run on a draft, and how draft
+state interacts with branch protection, rulesets, required checks, or merge
+queues. The documentation that defines the draft rules states neither, so no lane
+may claim either. A ready state is not an approval and not a green check, and a
+draft cannot be merged.
 
 **Preflight addition.** Before the first remote write of a dispatch, read the
 contribution-state record and record its value, its file md5, and the UTC read
