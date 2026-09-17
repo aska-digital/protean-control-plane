@@ -63,8 +63,9 @@ the one bundle a request names, not every skill.
 | internal-name gate | `python3 gates/protean-control-plane/check-internal-names.py .` |
 | control-plane gates | `python3 gates/protean-control-plane/check-control-plane-gates.py` |
 
-The wrapper locates the ops ingredient and runs its gates. When the ops
-ingredient is not installed beside it, each cited gate is reported `unavailable`
+The wrapper locates the ops ingredient and runs its gates, including the
+contribution-state gate (G-14). When the ops ingredient is not installed beside
+it, each cited gate is reported `unavailable`
 and the wrapper exits 0: degraded mode is reported, never hidden, and never
 faked. Tests cover both paths.
 
@@ -79,7 +80,11 @@ performs zero network calls and fails closed when the cache entry is absent.
 The skill deliberately does not restate platform mechanics or supervision and
 recovery steps, because the documents that carry them are not part of this
 distribution. The control plane cites the record gates rather than carrying them,
-which is why the dependency is hard. No unresolved item is carried by this
+which is why the dependency is hard. Section G states the rule for contribution
+mode and carries no counter: the bounded values, the toggle's value, and the
+counters live in the contribution-state record under the ops ingredient, so a
+reader of this skill learns what is permitted and the gate decides what is
+allowed. No unresolved item is carried by this
 ingredient; the open items of the protocol live in `protean-sym2p`.
 
 ## License

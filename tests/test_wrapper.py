@@ -35,12 +35,13 @@ class TestWrapper(unittest.TestCase):
             ops = os.path.join(tmp, "scripts", "protean-ops")
             os.makedirs(ops)
             for name in ("check-rotation.py", "check-inflight.py", "check-learnings.py",
-                         "check-hotpath-freeze.py", "check-decision-report.py"):
+                         "check-hotpath-freeze.py", "check-decision-report.py",
+                         "check-contrib-state.py"):
                 shutil.copy2(os.path.join(ROOT, "tests", "fixtures", "fake-gate.py"),
                              os.path.join(ops, name))
             result = run(env={"PROTEAN_OPS_GATES": ops})
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-            self.assertIn("available=5", result.stdout)
+            self.assertIn("available=6", result.stdout)
 
     def test_help(self):
         result = run("--help")

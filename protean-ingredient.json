@@ -1,6 +1,6 @@
 {
   "slug": "protean-control-plane",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "contract": "The control-plane skill pack: one canonical procedure home that routes a request to the minimum skill bundle, with the gate table and failure policy.",
   "kind": "skills",
   "entrypoint": "install.sh",
