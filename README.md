@@ -23,7 +23,7 @@ SKIP WHEN:
 
 | Path | Contents |
 |---|---|
-| `skills/protean-control-plane/` | the control-plane procedure skill |
+| `skills/protean-control-plane/` | the control-plane procedure skill, including `references/council.md` and `references/council-templates/` |
 | `gates/protean-control-plane/` | the wrapper that runs the cited record gates, the leak gate, and the blocklist |
 
 ## Install
@@ -55,6 +55,25 @@ requirements are reported as `degraded`.
 
 Read `skills/protean-control-plane/SKILL.md` first. It is the routing screen: load
 the one bundle a request names, not every skill.
+
+## The council procedure
+
+Section A routes "a structured team council" to the shipped council procedure at
+`skills/protean-control-plane/references/council.md`: when to convene a bounded
+deliberation, the seat plan (facilitator plus research and QA at minimum), the
+one-bounded-question agenda format, evidence and dissent capture, the decision
+record with operator-held gates restated verbatim, the execution handoff with
+receipts and read-backs, and the rule that no canonical surface is edited while
+a ruling is open. Six templates ship beside it in
+`skills/protean-control-plane/references/council-templates/`: council brief,
+agenda, decision record, evidence register, execution receipt, and follow-up
+action. The council advises and records; it does not bypass operator gates, QA
+verdicts, external-write approval, or production promotion.
+
+Section J states the relay role's live-state law (one canonical state home, one
+writer seat, event writes through the state CLI, handoff without transcript
+import). The full operator guide for that state system is published separately
+as its own canonical document.
 
 ## Gates
 
