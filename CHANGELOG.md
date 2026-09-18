@@ -3,6 +3,31 @@
 All notable changes to this repository are recorded here. The format is a short
 entry per release: what changed, why, and how it was verified.
 
+## 1.5.0
+
+- **What:** (a) one trigger-index row routing "a structured team council" to a new
+  shipped council procedure (`references/council.md` + six templates in
+  `references/council-templates/`); (b) a new section J, *Relay live state*, stating
+  the live-state law for concurrent relay sessions (one canonical state home, one
+  writer seat, CLI-written events, handoff without transcript import), stated as law
+  with the tool's own document owning the numbers; (c) the skill frontmatter, the
+  ingredient descriptor, the installer banner, and this changelog bumped in the same
+  change (the installer-banner drift lesson from 1.3.0 applied).
+- **Why:** the council system was piloted but had no published procedure, so a
+  convening brief, its bounded question format, evidence and dissent capture, and the
+  execution handoff were undefined; and the live-state section existed in the internal
+  procedure but not in this projection, leaving concurrent relay sessions without a
+  public statement of the seat and handoff rules.
+- **Division of the feature:** the council procedure and its templates ship here and
+  are cited from the trigger index; the relay live-state section states the law only -
+  the operator guide, commands, exit codes, and invariants are published separately as
+  their own canonical document and are cited, not copied. Section J adds no gate and
+  no bounded value.
+- **How verified:** internal-names and control-plane gates run clean on the changed
+  tree; the installer dry-run writes the same three-ingredient plan; link check over
+  the changed markdown is clean; no unresolved item added.
+- **License:** MIT. The committed `LICENSE` file is authoritative.
+
 ## 1.3.0
 
 - **What:** add one trigger-index row and an entry-state paragraph to section G, *Contribution

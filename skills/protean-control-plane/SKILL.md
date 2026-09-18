@@ -1,7 +1,7 @@
 ---
 name: protean-control-plane
 description: "Use for any dispatch, rotation, concurrency, GitHub workflow, or learning decision. Compact trigger index; load only the bundle the task names."
-version: 1.3.0
+version: 1.5.0
 author: the Protean publication
 license: MIT
 platforms: [linux, macos, windows]
@@ -48,6 +48,7 @@ procedure text.
 | Major decision (any change to a canonical home, layer model, gate, dispatch rule, public surface, credential or model policy, or anything irreversible without a user action) | this row plus the decision's own bundle | design renders the report, the coordinator approves | the decision report must exist and be linked before the change lands |
 | Continual contribution mode - idle-time work on a repository we own or depend on, delivered as a pull request, an issue, or a pull-request review | this skill's section G (the rule), the contribution-state record and its gate (the value), the GitHub workflow pack's contribution procedure (the mechanics), and the draft pipeline for anything a human approves | build implements, QA audits every contribution, the coordinator integrates | an evidenced gap plus a duplicate search before anything is drafted; the contribution-state gate green with the intended target and action class; an independent QA verdict on every contribution; exact-byte approval before any external write |
 | Contribution entry state - is this contribution a draft or a ready pull request | this skill's section G (the rule and the entry state) and `protean-github-flow` (the state semantics, the CLI and API forms, and the transition rules) | build implements and opens, QA audits the exact live head, the coordinator integrates | draft at entry for anything large or high-attention; ready only for a small fix in a repository we administer and only after the independent pre-post verdict; the ready transition is a separate approved step with its own head read-back |
+| A structured team council - convene a bounded deliberation with a written decision record | the council procedure (`skills/protean-control-plane/references/council.md`) and its templates | the facilitator plus research and QA at minimum; the other seats as the bounded question names | exactly one bounded question fixed in the convening brief; every factual claim carries a source and dissents are recorded, never averaged away; owner-held gates restated verbatim in the decision record; no canonical edits while a ruling is open; outputs enter the relay's live-state record (section J) and the ops records (section B) |
 
 ## B. Mandatory preflight (before the first write of any dispatch)
 
@@ -237,6 +238,31 @@ notification is a trigger to evaluate, never proof that work is done.
 7. **Evidence.** The reply cites the classification actually performed: the registry poll, the
    per-lane statuses, any rows closed, the branch taken, and the epoch claim read-back. A reply
    with no poll and no predicate result cannot be verified and does not close the turn.
+
+## J. Relay live state (seat, events, handoff)
+
+The relay role's live state lives in one canonical append-only state home, owned
+by the relay. Concurrent relay sessions coordinate through it: readers are free,
+exactly one writer holds the seat. The rule is here; the tool, its file contract,
+and its invariants own the numbers.
+
+- A relay session never hand-edits a shared status file as the source of truth.
+  It claims the seat through the state CLI, writes events through the CLI, and
+  reads the compact projection at session start - never an old transcript.
+- Concurrent sessions: readers are free; exactly one seat holder writes. A stale
+  seat is claimable with the takeover recorded; forcing a live seat is an
+  explicit steal and is recorded. A revision conflict exits with a distinct
+  code - reconcile and retry, never force.
+- The overview reads the compact projection first, falling back to the legacy
+  task-home file only while the migration window is open.
+- Everything belongs in the state record except what is deliberately excluded:
+  credentials, tokens, transcripts, logs, caches, and scratch never enter the
+  state, the events, the projections, or a handoff bundle. The state is
+  single-machine scope; filesystem permissions and backups are part of the
+  contract.
+- The full operator guide - commands, exit codes, seat semantics, TTL and
+  recovery, verification and rollback - is published separately as its own
+  canonical document; this section restates no bounded value.
 
 ## Gate commands
 
