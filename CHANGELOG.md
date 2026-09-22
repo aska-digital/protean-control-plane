@@ -3,6 +3,24 @@
 All notable changes to this repository are recorded here. The format is a short
 entry per release: what changed, why, and how it was verified.
 
+## 1.6.0
+
+- **What:** section J (*Relay live state*) restated for the git-substrate
+  multi-writer store: readers are free, every session stages writes on its
+  own proposal branch, and exactly one merge-seat holder merges to the main
+  line (gate, then merge, then regenerate the projection). Same-record
+  conflicts are refused before any merge attempt with a distinct exit code.
+  The law stays generic — no backend token, no bounded value copied. The
+  skill frontmatter, the ingredient descriptor, the installer banner, and
+  this changelog bumped in the same change.
+- **Why:** the 1.5.0 law ("exactly one writer holds the seat") describes the
+  retired single-writer model; after the cutover it would read as current
+  while being false. A stale law is worse than no law.
+- **How verified:** internal-names and control-plane gates run clean on the
+  changed tree; the installer dry-run writes the same three-ingredient plan;
+  link check over the changed markdown is clean; no unresolved item added.
+- **License:** MIT. The committed `LICENSE` file is authoritative.
+
 ## 1.5.0
 
 - **What:** (a) one trigger-index row routing "a structured team council" to a new

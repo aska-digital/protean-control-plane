@@ -1,7 +1,7 @@
 ---
 name: protean-control-plane
 description: "Use for any dispatch, rotation, concurrency, GitHub workflow, or learning decision. Compact trigger index; load only the bundle the task names."
-version: 1.5.0
+version: 1.6.0
 author: the Protean publication
 license: MIT
 platforms: [linux, macos, windows]
@@ -243,16 +243,19 @@ notification is a trigger to evaluate, never proof that work is done.
 
 The relay role's live state lives in one canonical append-only state home, owned
 by the relay. Concurrent relay sessions coordinate through it: readers are free,
-exactly one writer holds the seat. The rule is here; the tool, its file contract,
+every session stages its writes on its own proposal branch, and exactly one
+merge-seat holder merges to the main line. The rule is here; the tool, its file contract,
 and its invariants own the numbers.
 
 - A relay session never hand-edits a shared status file as the source of truth.
-  It claims the seat through the state CLI, writes events through the CLI, and
+  It stages writes on its own proposal branch through the state CLI, and
   reads the compact projection at session start - never an old transcript.
-- Concurrent sessions: readers are free; exactly one seat holder writes. A stale
-  seat is claimable with the takeover recorded; forcing a live seat is an
-  explicit steal and is recorded. A revision conflict exits with a distinct
-  code - reconcile and retry, never force.
+- Concurrent sessions: readers are free; writers never share a branch. The
+  merge seat is the only path to the main line: gate, then merge, then
+  regenerate the projection. A stale seat is claimable with the takeover
+  recorded; forcing a live seat is an explicit steal and is recorded.
+  A same-record conflict is refused before any merge attempt, with a distinct
+  exit code - repropose on the newer revision and retry, never force.
 - The overview reads the compact projection first, falling back to the legacy
   task-home file only while the migration window is open.
 - Everything belongs in the state record except what is deliberately excluded:

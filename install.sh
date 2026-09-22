@@ -5,7 +5,7 @@
 set -euo pipefail
 
 SLUG="protean-control-plane"
-VERSION="1.5.0"
+VERSION="1.6.0"
 
 PAYLOAD=(
   "skills/protean-control-plane"
