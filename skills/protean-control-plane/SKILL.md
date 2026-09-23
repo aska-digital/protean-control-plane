@@ -313,6 +313,15 @@ and its invariants own the numbers.
   recovery, verification and rollback - is published separately as its own
   canonical document; this section restates no bounded value.
 
+**Wording amendment — locked architecture decision record (2026-09-23).**
+This documentation-only clarification changes no behavior, code, or invariant.
+In the v2 record format, J3 names the v1 payload plus `rev`, `head_event`, and
+the additive `writer` field. During fresh genesis, `rev` is seeded to the v1
+revision that last touched each record; for the three live records with no
+provenance event, the fallback is `rev :=` that record's v1 `revision` field.
+Genesis, CAS, conflict semantics, and the parity exclusions for `rev` and
+`head_event` are unchanged.
+
 ## Gate commands
 
 The record gates belong to the `protean-ops` ingredient and are cited here, never
