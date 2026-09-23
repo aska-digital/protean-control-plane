@@ -1,7 +1,7 @@
 ---
 name: protean-control-plane
 description: "Use for any dispatch, rotation, concurrency, GitHub workflow, or learning decision. Compact trigger index; load only the bundle the task names."
-version: 1.6.0
+version: 1.7.0
 author: the Protean publication
 license: MIT
 platforms: [linux, macos, windows]
@@ -13,12 +13,15 @@ metadata:
 
 # Control plane - the one canonical procedure home
 
-Two entry points lead into the same system. A cross-project **relay** role
-coordinates several coordinator instances across projects and sessions. An
-in-project **coordinator** orchestrates the specialist roles inside one project or
-session. The coordinator never bypasses the QA gate and the final review. The
-relay never performs in-project specialist work and never silently merges
-conflicts.
+A cross-project **relay** role sits two layers above execution. It dispatches
+and supervises coordinator instances across projects and sessions, and an
+in-project **coordinator** orchestrates the specialist roles inside its project
+or session. The relay never performs project work, edits project files, writes
+public content, posts GitHub comments or reviews, merges, deploys, or dispatches
+a specialist directly: its only execution surface is launching a coordinator
+instance, and its verification surface is the dispatch receipt. The coordinator
+never bypasses the QA gate and the final review. The relay never performs
+in-project specialist work and never silently merges conflicts.
 
 This is the procedure half of the control plane (the law). The state half (the
 records) is append-only under `records/` in the installed kit, or under
@@ -70,6 +73,16 @@ procedure text.
    pending, then fill the id captured from the worker's own output log. A row
    whose launch id was not captured from its output log is invalid.
 
+8. Bars in a brief are commands with units, and a prose gate is diff-scoped.
+   Every numeric or byte bar names its exact command including the count flag
+   (`-c` lines versus `-o` occurrences), and where a hash is pinned, the
+   normalizer that computes it. A prose gate never reads "the checker exits 0
+   on each file": run it on the file at the merge base and at the head, require
+   the head to introduce NO new violation, and require every line the lane
+   changed to pass on its own. Pre-existing violations in text the lane may not
+   edit are a note in the receipt, never a stop - a file-scoped prose bar blocks
+   a lane on a defect it was forbidden to fix.
+
 ## C. Automatic GitHub workflow
 
 1. Triage notifications into: pull request review, issue response, merge or
@@ -85,12 +98,33 @@ procedure text.
 5. The pipeline's gates run in one pass and must all pass: prose, identifier
    sweep, verbatim-quote integrity, oversight blockquote, render fidelity,
    palette, self-containment, chrome, change banner.
+
+5b. Apply the public commit-SHA presentation SOP in the
+    `protean-operating-doctrine` skill, section 11: full SHAs belong in machine
+    pins and in exact validation evidence; human-facing prose uses a linked
+    short SHA, unless an exact head, regression, rollback, or source pin
+    requires the full value. If a pin changes, rerun validation and update every
+    claim.
 6. A second-member proofread plus fact audit is mandatory. The author never
    audits their own writing. QA is the independent gate; the coordinator gives
    the final integration review.
 7. No external side effect without explicit user approval, unless that action
    was authorized in advance. After every external write, read back the exact
    target, head, and body, and diff against the approved draft.
+
+8. A CI run that never appeared is a pull-request-state question before it is
+   an infrastructure question: read `gh pr view <n> --repo <o>/<r> --json
+   mergeable,mergeable_state` first. A `pull_request` workflow does not run
+   while the pull request is in conflict, so an absent run on a conflicted pull
+   request is expected, not a stall; never escalate to the owner as an
+   organization or application problem without that read.
+
+9. A gate test that derives its data (term lists, fixtures, constants) from an
+   author-local path hard-fails on any runner that lacks it. Such a gate must
+   SKIP when its source is absent and stay fail-closed when the source is
+   present but unusable, and its acceptance set must include a teeth check
+   proving the gate still fails on a real violation: a gate that only ever skips
+   is a bypass, not a gate.
 
 ## D. Firm failure policy
 
@@ -102,6 +136,18 @@ procedure text.
   model; rotate only within the role's configured set.
 - A stale, expired, or crashed inflight claim blocks overlapping writes on its
   paths until it is classified. Do not route around the flag.
+- A stage verdict is hollow until its raw output is on disk, and a hollow verdict is a gate
+  failure, not a pass. A worker that writes its QA file as prose conclusions while the capture
+  scaffolding stays empty (`commands.log` holding only a start marker, an empty download
+  directory, a header-only file) can assert "checkers exit 0, no new violation" for a record
+  that already failed, and a brief whose numeric evidence bar has no enforcement surface fails
+  identically on the second pass. Rules: a verification artifact must carry the per-check
+  command and its verbatim stdout, and any claim of an exit code must be pasted, never
+  summarised; a QA-verdict consumer (reviewer, relay, coordinator) checks that the claimed
+  evidence exists before quoting the verdict. Counter-check while auditing: the gate scripts
+  carry no executable bit, so invoke them through `python3 <script>` - a bare `./script`
+  failing `Permission denied` silently empties the captured result and reads as "no
+  violations found".
 - If no relevant skill exists for a recurring task, record one skill-gap
   learning in the learnings record: one canonical home, one enforcement surface,
   one independent verifier.
