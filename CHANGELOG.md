@@ -3,6 +3,17 @@
 All notable changes to this repository are recorded here. The format is a short
 entry per release: what changed, why, and how it was verified.
 
+## 1.6.1
+
+- **What:** point the skill's references at the writing skill's new name, `clean-writing`. The
+  `related_skills` metadata and the GitHub-triage row in the bundle table carried the old name.
+- **Why:** the writing skill was renamed in `protean-doctrine` 2.0.0, so the old name no longer
+  resolves to an installed skill.
+- **How verified:** internal-names and control-plane gates run clean on the changed tree, and
+  `python3 -m unittest discover -s tests` passes. The skill frontmatter, the ingredient descriptor,
+  and the installer banner are bumped in the same change.
+- **License:** MIT. The committed `LICENSE` file is authoritative.
+
 ## 1.6.0
 
 - **What:** section J (*Relay live state*) restated for the git-substrate

@@ -1,14 +1,14 @@
 ---
 name: protean-control-plane
 description: "Use for any dispatch, rotation, concurrency, GitHub workflow, or learning decision. Compact trigger index; load only the bundle the task names."
-version: 1.7.0
+version: 1.7.1
 author: the Protean publication
 license: MIT
 platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [Orchestration, Dispatch, Rotation, Concurrency, Gates, SOP]
-    related_skills: [protean-operating-doctrine, draft-review-html, github-pr-audit, github-issues, external-writing-discipline]
+    related_skills: [protean-operating-doctrine, draft-review-html, github-pr-audit, github-issues, clean-writing]
 ---
 
 # Control plane - the one canonical procedure home
@@ -43,7 +43,7 @@ procedure text.
 
 | intent (what was asked) | minimum skill bundle | roles involved | mandatory gates |
 |---|---|---|---|
-| GitHub notification triage - "address my last N GitHub notifications" | the authenticated GitHub read path; `github-issues` or the code-review procedure as applicable; `github-pr-audit` for any review or merge decision; `external-writing-discipline` for human-facing text; `draft-review-html` for every draft intended for operator review | research writes, build implements, QA audits, the coordinator integrates | no posting or merge without explicit approval plus post-action read-back; the prose gate; the draft pipeline gates |
+| GitHub notification triage - "address my last N GitHub notifications" | the authenticated GitHub read path; `github-issues` or the code-review procedure as applicable; `github-pr-audit` for any review or merge decision; `clean-writing` for human-facing text; `draft-review-html` for every draft intended for operator review | research writes, build implements, QA audits, the coordinator integrates | no posting or merge without explicit approval plus post-action read-back; the prose gate; the draft pipeline gates |
 | GitHub pull request or issue draft | `draft-review-html` - one command `scripts/protean-drafts/draft_pipeline.py`, start from the shipped templates, `--owners <poster-handle>` for external repositories, omit `--owners` for internal drafts | one role authors, a second audits (an author never audits their own writing) | quote-integrity (slice, never retype), prose gate, the pipeline's own gate list |
 | GitHub merge or review decision | `github-pr-audit` - live-head audit, repository tests, evidence-register check, formal review protocol, merge method from history | QA audits, the coordinator integrates | post-action read-back of the exact head and body; no merge without approval |
 | New external source, repository, or URL ingestion | the knowledge-ingestion procedure; a batch of five or more sources uses the batch form; a capability audit precedes adopting any external tool | research ingests; the external knowledge base is the home for external data | external data goes to the knowledge base only; internal procedure goes to a skill; one fact, one home |
