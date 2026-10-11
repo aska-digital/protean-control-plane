@@ -63,7 +63,11 @@ procedure text.
    first write, and record the conflict check taken immediately before each
    write.
 4. Read the target role's own configuration immediately before dispatching it,
-   never a remembered model.
+   never a remembered model. Before the spawn, run `python3
+   gates/check-brief-model.py --brief <brief> --profile <name>` from the
+   protean-ops install. Exit 1 refuses the launch. A model copied from an
+   earlier read in the same session is the defect this command catches. Do not
+   edit the profile config to make a stale brief pass.
 5. Record the provider and model in the ledger row, and verify them afterwards
    against the target's own usage record. Configuration, ledger, and usage must
    agree, or the row becomes an unresolved decision.
