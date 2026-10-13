@@ -130,6 +130,39 @@ procedure text.
    proving the gate still fails on a real violation: a gate that only ever skips
    is a bypass, not a gate.
 
+10. A staging deployment is live only after the exact target URL serves the
+    intended page. Exit 0 and deployment `READY` are not content evidence.
+    Before deploying, compare the deploy tree's `vercel.json` redirect rules
+    with the target path, including wildcard rules. After deploying, use a
+    cache-busted GET at that same path; preserve the trailing slash and any
+    existing query, and do not follow redirects. For a static page, set
+    `target_url` to the exact staging URL (without a fragment) and
+    `expected_file` to the built file placed at that path in the deploy copy:
+
+    ```bash
+    evidence_dir=$(mktemp -d) || exit 1
+    case "$target_url" in
+      *\?*) separator='&' ;;
+      *) separator='?' ;;
+    esac
+    verification_url="${target_url}${separator}_verify=$(basename "$evidence_dir")"
+    status=$(curl --disable --silent --show-error --max-time 60 \
+      --dump-header "$evidence_dir/headers" --output "$evidence_dir/body" \
+      --write-out '%{http_code}' "$verification_url") || exit 1
+    printf '%s\n' "$status" > "$evidence_dir/status"
+    test "$status" = 200 && cmp -- "$expected_file" "$evidence_dir/body"
+    ```
+
+    A non-zero result blocks advancement. Keep the command, exit status,
+    response headers, HTTP status, and served bytes in the verification receipt.
+    Any 3xx response means the target is not yet live, even if the destination
+    serves the right bytes. Surface the `Location` header and the matching
+    redirect rule as a routing conflict before calling the page content-failed.
+    The coordinator owns the routing decision: remove a conflicting rule only
+    from a git-free deploy copy, never from the source-of-record tree as a
+    builder fix. Redeploy the same project and repeat this exact-URL check
+    before reporting success.
+
 ## D. Firm failure policy
 
 - A gate failure blocks advancement. Gates are never silently skipped.
